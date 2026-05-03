@@ -7,6 +7,9 @@
   --color-light--1: #aaa;
   --color-light--2: #ececec;
   --color-light--3: rgb(214, 222, 224);
+
+  --color-danger: #eb3232;
+  --color-edit: #51c280;
 }
 
 * {
@@ -125,7 +128,9 @@ a:visited {
 
   /* Match height and activity boxes */
   height: 9.25rem;
-  transition: all 0.5s, transform 1ms;
+  transition:
+    all 0.5s,
+    transform 1ms;
 }
 
 .form.hidden {
@@ -160,6 +165,51 @@ a:visited {
   border-radius: 3px;
   background-color: var(--color-light--3);
   transition: all 0.2s;
+}
+
+.item-actions {
+  grid-column: 1 / -1;
+  display: flex;
+  justify-content: space-between;
+}
+
+.item-actions__btn {
+  padding: 8px 12px;
+  border-radius: 6px;
+  color: var(--color-light--2);
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.item-actions__btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  opacity: 0.95;
+}
+
+.item-actions__btn:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.item-actions__btn--edit {
+  background-color: var(--color-edit);
+}
+
+.item-actions__btn--delete {
+  background-color: var(--color-danger);
+}
+
+.item-actions__btn--clear{
+  padding: 10px;
+  background-color: var(--color-danger);
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 10px;
 }
 
 .form__input:focus {

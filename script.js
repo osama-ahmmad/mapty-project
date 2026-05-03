@@ -63,6 +63,9 @@ const inputDistance = document.querySelector('.form__input--distance');
 const inputDuration = document.querySelector('.form__input--duration');
 const inputCadence = document.querySelector('.form__input--cadence');
 const inputElevation = document.querySelector('.form__input--elevation');
+const btnEdit = document.querySelector('.item-actions__btn--edit');
+const btnDelete = document.querySelector('.item-actions__btn--delete');
+const btnClear = document.querySelector('.item-actions__btn--clear');
 
 class App {
   #map;
@@ -80,6 +83,8 @@ class App {
     form.addEventListener('submit', this._newWorkout.bind(this));
     inputType.addEventListener('change', this._toggleElevationField.bind(this));
     containerWorkouts.addEventListener('click', this._moveToPopup.bind(this));
+    btnClear.addEventListener('click', this._reset.bind(this));
+    containerWorkouts.addEventListener('click', this._removeElement.bind(this));
   }
 
   _getPosition() {
@@ -203,7 +208,7 @@ class App {
   }
 
   _renderWorkoutMarker(workout) {
-    L.marker(workout.coords)
+    const marker = L.marker(workout.coords)
       .addTo(this.#map)
       .bindPopup(
         L.popup({
@@ -218,6 +223,8 @@ class App {
         `${workout.type === 'running' ? '🏃‍♂️' : '🚴‍♀️'} ${workout.description}`,
       )
       .openPopup();
+
+    workout.marker = marker;
   }
 
   _renderWorkout(workout) {
@@ -248,6 +255,15 @@ class App {
             <span class="workout__value">${workout.cadence}</span>
             <span class="workout__unit">spm</span>
           </div>
+          <div class="item-actions">
+            <button class="item-actions__btn item-actions__btn--edit">
+              Edit
+            </button>
+
+            <button class="item-actions__btn item-actions__btn--delete">
+              Delete
+            </button>
+          </div>
         </li>`;
 
     if (workout.type === 'cycling') {
@@ -262,6 +278,15 @@ class App {
               <span class="workout__value">${workout.elevationGain}</span>
               <span class="workout__unit">m</span>
             </div>
+            <div class="item-actions">
+            <button class="item-actions__btn item-actions__btn--edit">
+              Edit
+            </button>
+
+            <button class="item-actions__btn item-actions__btn--delete">
+              Delete
+            </button>
+          </div>
           </li>
       `;
     }
@@ -288,7 +313,11 @@ class App {
   _setLocalStorage() {
     // local storage is key value store
     //JSON.stringify => convert any object in JS to string
-    localStorage.setItem('workouts', JSON.stringify(this.#workouts)); // (key,value) string
+    const workoutsToSave = this.#workouts.map(work => {
+      const { marker, ...rest } = work;
+      return rest;
+    });
+    localStorage.setItem('workouts', JSON.stringify(workoutsToSave)); // (key,value) string
   }
 
   _getLocalStorage() {
@@ -297,14 +326,49 @@ class App {
 
     if (!data) return;
 
-    this.#workouts = data;
+    this.#workouts = data.map(work => {
+      if (work.type === 'running') {
+        return new Running(
+          work.coords,
+          work.distance,
+          work.duration,
+          work.cadence,
+        );
+      } else {
+        return new Cycling(
+          work.coords,
+          work.distance,
+          work.duration,
+          work.elevationGain,
+        );
+      }
+    });
 
     this.#workouts.forEach(work => {
       this._renderWorkout(work);
     });
   }
 
-  reset() {
+  _removeElement(e) {
+    const btnDeleteEl = e.target.closest('.item-actions__btn--delete');
+    if (!btnDeleteEl) return;
+
+    const workoutEl = btnDeleteEl.closest('.workout');
+
+    const workout = this.#workouts.find(
+      work => work.id === workoutEl.dataset.id,
+    );
+
+    this.#workouts = this.#workouts.filter(work => work.id !== workout.id);
+
+    localStorage.setItem('workouts', JSON.stringify(this.#workouts));
+
+    workoutEl.remove();
+
+    workout.marker.remove();
+  }
+
+  _reset() {
     localStorage.removeItem('workouts');
     location.reload();
   }
