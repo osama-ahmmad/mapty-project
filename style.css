@@ -58,6 +58,24 @@ a:visited {
   margin-bottom: 4rem;
 }
 
+.btn--sort {
+  background: none;
+  border: none;
+  border-radius: 10rem;
+  font-size: 1.3rem;
+  font-weight: 600;
+  cursor: pointer;
+  color: var(--color-brand--2);
+  transition: all 0.3s;
+  padding: 0.8rem 1.6rem;
+  margin-bottom: 2rem;
+}
+
+.btn--sort:hover {
+  background-color: var(--color-dark--2);
+  color: var(--color-brand--1);
+}
+
 .workouts {
   list-style: none;
   height: 77vh;
@@ -119,7 +137,7 @@ a:visited {
 .form {
   background-color: var(--color-dark--2);
   border-radius: 5px;
-  padding: 1.5rem 2.75rem;
+  padding: 1rem 2.75rem;
   margin-bottom: 1.75rem;
 
   display: grid;
@@ -127,7 +145,7 @@ a:visited {
   gap: 0.5rem 2.5rem;
 
   /* Match height and activity boxes */
-  height: 9.25rem;
+
   transition:
     all 0.5s,
     transform 1ms;
@@ -173,7 +191,8 @@ a:visited {
   justify-content: space-between;
 }
 
-.item-actions__btn {
+.item-actions__btn,
+.form__btn {
   padding: 8px 12px;
   border-radius: 6px;
   color: var(--color-light--2);
@@ -185,18 +204,19 @@ a:visited {
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
-.item-actions__btn:hover {
+.item-actions__btn:hover,.form__btn:hover {
   transform: translateY(-1px);
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
   opacity: 0.95;
 }
 
-.item-actions__btn:active {
+.item-actions__btn:active,.form__btn:active {
   transform: translateY(0);
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
-.item-actions__btn--edit {
+.item-actions__btn--edit,
+.form__btn {
   background-color: var(--color-edit);
 }
 
@@ -204,7 +224,7 @@ a:visited {
   background-color: var(--color-danger);
 }
 
-.item-actions__btn--clear{
+.item-actions__btn--clear {
   padding: 10px;
   background-color: var(--color-danger);
   font-size: 20px;
@@ -218,7 +238,9 @@ a:visited {
 }
 
 .form__btn {
-  display: none;
+  grid-column: 2 / -1;
+  margin-left: auto;
+  margin-top: 3px;
 }
 
 .copyright {
@@ -267,4 +289,8 @@ a:visited {
 }
 .cycling-popup .leaflet-popup-content-wrapper {
   border-left: 5px solid var(--color-brand--1);
+}
+
+.swal-big {
+  font-size: 1.6rem;
 }
